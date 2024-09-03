@@ -1,15 +1,16 @@
 import Link from 'next/link'
-import { FaChevronLeft } from 'react-icons/fa6'
+
+import { BackIcon } from './icons/Icons'
 
 interface Props {
   title?: string
 }
 const MobileHeader: React.FC<Props> = ({ title = '' }) => {
   return (
-    <div className="flex justify-center items-center bg-slate-300 h-9">
+    <div className="flex justify-center items-center bg-sky-100 h-10 md:hidden">
       <div className="absolute left-4">
         <Link href="/" passHref>
-          <FaChevronLeft />
+          <BackIcon />
         </Link>
       </div>
       <div>{title}</div>

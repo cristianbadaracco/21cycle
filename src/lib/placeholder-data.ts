@@ -1,3 +1,7 @@
+const generateId = (): string => {
+  return Math.random().toString(36).substring(2, 9) + Date.now().toString(36)
+}
+
 export const CYCLE_BEHAVIORS = [
   { behavior: 'good', note: 'estoy bien, fue un gran dia' },
   {
@@ -19,7 +23,3 @@ export const CYCLE_BEHAVIORS = [
   ...behavior,
   id: generateId(),
 }))
-
-const generateId = (): string => {
-  return Math.random().toString(36).substring(2, 9) + Date.now().toString(36)
-}

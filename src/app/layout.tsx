@@ -1,13 +1,15 @@
+import React from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+
 import './globals.css'
-import React from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: '21 Cycle',
   description: 'Improve your own version in 21 days.',
+  viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
 }
 
 interface LayoutProps {
@@ -17,7 +19,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="es">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} antialiased`}>{children}</body>
     </html>
   )
 }
