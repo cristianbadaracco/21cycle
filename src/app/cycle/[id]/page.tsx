@@ -8,24 +8,23 @@ import '@natscale/react-calendar/dist/main.css'
 import { CYCLE_BEHAVIORS } from '@/lib/placeholder-data'
 
 import DailyChart from '@/components/charts/DailyChart'
-import BehaviorInfo from '../_components/BehaviorInfo'
+import BehaviorItem from '../_components/BehaviorItem'
 import Form from '../_components/Form'
 
 import { AddIcon } from '@/components/icons/Icons'
 
-import type { Behavior, Statistic } from '@/lib/definitions'
+import type { BehaviorInstance, Statistic } from '@/lib/definitions'
 import type { Value } from '@natscale/react-calendar/dist/utils/types'
+import { uuidv4 } from '@/lib/utils'
 
 import useModal from '@/hooks/useModal'
-
-import { uuidv4 } from '@/lib/utils'
 
 const Cycle: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Value | undefined>(new Date())
   const [statistics, setStatistics] = useState<Statistic[] | undefined>(undefined)
-  const [behaviors, setBehaviors] = useState<Behavior[]>(CYCLE_BEHAVIORS ?? [])
+  const [behaviors, setBehaviors] = useState<BehaviorInstance[]>(CYCLE_BEHAVIORS ?? [])
   const [isEditMode, setIsEditMode] = useState(false)
-  const [selectedBehavior, setSelectedBehavior] = useState<Behavior | undefined>(undefined)
+  const [selectedBehavior, setSelectedBehavior] = useState<BehaviorInstance | undefined>(undefined)
 
   const { isOpen, openModal, closeModal } = useModal()
 
@@ -43,21 +42,22 @@ const Cycle: React.FC = () => {
 
   const getColor = (behavior: string): string => {
     switch (behavior) {
-      case 'good':
-        return '#86efac'
-      case 'bad':
-        return '#fca5a5'
+      case '1':
+        return 'success'
+      case '2':
+        return 'danger'
       default:
         return 'black'
     }
   }
 
-  const transformBehaviorsToStatistics = useCallback((behaviors: Behavior[]): Statistic[] => {
-    const types = new Set(behaviors.map((behavior) => behavior.behavior))
+  const transformBehaviorsToStatistics = useCallback((behaviors: BehaviorInstance[]): Statistic[] => {
+    const types = new Set(behaviors.map((behavior) => behavior?.behavior_id))
+    console.log('Types', types)
     const counts = Array.from(types).map((type) => {
       return {
         name: type,
-        value: behaviors.filter((behavior) => behavior.behavior === type).length,
+        value: behaviors.filter((behavior) => behavior?.behavior_id === type).length,
         color: getColor(type),
       }
     })
@@ -71,7 +71,7 @@ const Cycle: React.FC = () => {
     }
   }, [behaviors, transformBehaviorsToStatistics])
 
-  const onSubmit = (values: Behavior): void => {
+  const onSubmit = (values: BehaviorInstance): void => {
     if (isEditMode) {
       const updatedBehaviors = behaviors.map((behavior) => {
         if (behavior.id === values.id) {
@@ -93,7 +93,7 @@ const Cycle: React.FC = () => {
     setSelectedBehavior(undefined)
   }, [])
 
-  const onEditBehavior = useCallback((behavior: Behavior) => {
+  const onEditBehavior = useCallback((behavior: BehaviorInstance) => {
     openModal()
     setIsEditMode(true)
     setSelectedBehavior(behavior)
@@ -101,7 +101,7 @@ const Cycle: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4 p-2 md:flex-row">
-      <Modal destroyOnClose open={isOpen} onCancel={closeModal} onOk={closeModal} footer={null}>
+      <Modal destroyOnClose open={isOpen} onCancel={closeModal} onOk={closeModal} footer={null} width={350}>
         <Form onSubmit={onSubmit} data={selectedBehavior} />
       </Modal>
       <div className="h-[0_0_70%] flex justify-center items-center md:flex-col md:justify-start">
@@ -109,7 +109,14 @@ const Cycle: React.FC = () => {
       </div>
       <div className="h-[0_0_30%] ">
         <div className="flex justify-between items-center mt-4 md:mt-0">
-          <span className="text-lg">{selectedDate?.toString()}</span>
+          <span className="text-lg font-medium">
+            {(selectedDate as Date)?.toLocaleDateString('es', {
+              weekday: 'short',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </span>
           <div className="flex gap-2">
             <div
               className="border-2 rounded-md border-slate-800 w-10 h-10 flex justify-center items-center"
@@ -120,10 +127,9 @@ const Cycle: React.FC = () => {
           </div>
         </div>
         {behaviors.map((behavior) => (
-          <BehaviorInfo
+          <BehaviorItem
             key={behavior.id}
-            behavior={behavior.behavior}
-            note={behavior.note}
+            behavior={behavior}
             onDelete={() => {
               onDelete(behavior.id)
             }}

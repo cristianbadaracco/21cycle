@@ -2,11 +2,11 @@ import { Form, Input, Row, Col, Button, Radio } from 'antd'
 
 import { GoodIcon, BadIcon } from '@/components/icons/Icons'
 
-import type { Behavior } from '@/lib/definitions'
+import type { BehaviorInstance } from '@/lib/definitions'
 
 interface FormBehaviorProps {
   onSubmit: (values: any) => void
-  data?: Behavior
+  data?: BehaviorInstance
 }
 
 const FormBehavior: React.FC<FormBehaviorProps> = ({ onSubmit, data }) => {
@@ -21,16 +21,14 @@ const FormBehavior: React.FC<FormBehaviorProps> = ({ onSubmit, data }) => {
             label="Comportamiento"
             name="behavior"
             key="behavior"
-            rules={[
-              { required: true, message: 'Se requiere un comportamiento' },
-            ]}
+            rules={[{ required: true, message: 'Se requiere un comportamiento' }]}
           >
-            <Radio.Group buttonStyle="solid" className="flex">
+            <Radio.Group buttonStyle="solid" className="flex" size="large">
               <Radio.Button value="good" className="flex items-center">
-                <GoodIcon />
+                <GoodIcon size={25} />
               </Radio.Button>
               <Radio.Button value="bad" className="flex items-center">
-                <BadIcon />
+                <BadIcon size={25} />
               </Radio.Button>
             </Radio.Group>
           </Form.Item>

@@ -1,16 +1,13 @@
-import Link from 'next/link'
+import { getAllCycles } from '@/lib/data'
+import CyclesList from '@/components/CycleList'
 
-import Navbar from '@/components/Navbar'
+const Home: React.FC = async (): Promise<JSX.Element> => {
+  const cycles = await getAllCycles()
 
-const Home: React.FC = () => {
   return (
     <main className="flex min-h-screen p-2 flex-col gap-2">
-      <Navbar />
-      <div>
-        <Link href="/cycle/1" className="cursor-pointer text-blue-300">
-          Cycle
-        </Link>
-      </div>
+      <h1 className="text-3xl font-bold">Ciclos</h1>
+      <CyclesList cycles={cycles} />
     </main>
   )
 }

@@ -1,25 +1,31 @@
-const generateId = (): string => {
-  return Math.random().toString(36).substring(2, 9) + Date.now().toString(36)
-}
+import type { BehaviorInstance } from './definitions'
 
-export const CYCLE_BEHAVIORS = [
-  { behavior: 'good', note: 'estoy bien, fue un gran dia' },
+export const CYCLE_BEHAVIORS: BehaviorInstance[] = [
+  { id: '1', behavior_id: '1', note: 'estoy bien, fue un gran dia' },
   {
-    behavior: 'bad',
+    id: '2',
+    behavior_id: '2',
     note: 'estoy para atras wacho, todo mal!!! ojala que aquí mejore sino puente colgante ya te siento 😪',
   },
-  { behavior: 'good', note: 'estoy bien, fue un gran dia' },
+  { id: '3', behavior_id: '1', note: 'estoy bien, fue un gran dia' },
   {
-    behavior: 'bad',
+    id: '4',
+    behavior_id: '2',
     note: 'estoy para atras wacho, todo mal!!! ojala que aquí mejore sino puente colgante ya te siento 😪',
   },
-  { behavior: 'good', note: 'estoy bien, fue un gran dia' },
   {
-    behavior: 'bad',
+    id: '5',
+    behavior_id: '1',
+    note: 'estoy bien, fue un gran dia',
+  },
+  {
+    id: '6',
+    behavior_id: '2',
     note: 'estoy para atras wacho, todo mal!!! ojala que aquí mejore sino puente colgante ya te siento 😪',
   },
-  { behavior: 'good', note: 'estoy bien, fue un gran dia' },
-].map((behavior) => ({
-  ...behavior,
-  id: generateId(),
-}))
+  {
+    id: '7',
+    behavior_id: '1',
+    note: 'estoy bien, fue un gran dia',
+  },
+]

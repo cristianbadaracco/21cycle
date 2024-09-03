@@ -24,5 +24,6 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/comma-dangle': 'off',
     'react/prop-types': 'off',
+    '@typescript-eslint/naming-convention': 'off',
   },
 }
