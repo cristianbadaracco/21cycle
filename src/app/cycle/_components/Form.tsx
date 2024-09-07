@@ -1,9 +1,7 @@
 import { Form, Input, Row, Col, Button, Radio, Space } from 'antd'
-
 import { GoodIcon, BadIcon } from '@/components/icons/Icons'
 
 import type { BehaviorInstanceComplete } from '@/lib/definitions'
-import Image from 'next/image'
 
 interface FormBehaviorProps {
   onSubmit: (values: any) => void

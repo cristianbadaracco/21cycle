@@ -1,11 +1,11 @@
 import PopConfirm from '@/components/PopConfirm'
+import { Button } from 'antd'
 
 import useModal from '@/hooks/useModal'
 
-import { MdClose as CloseIcon } from 'react-icons/md'
-
 import type { BehaviorInstanceComplete } from '@/lib/definitions'
-import { BadIcon, GoodIcon } from '@/components/icons/Icons'
+
+import { BadIcon, GoodIcon, RemoveIcon } from '@/components/icons/Icons'
 
 interface BehaviorInfoProps {
   behavior: BehaviorInstanceComplete
@@ -18,17 +18,19 @@ const BehaviorItem: React.FC<BehaviorInfoProps> = ({ behavior, onDelete, onSelec
   const { isOpen: openPopconfirm, openModal: openPopconfirmModal, closeModal: closePopconfirm } = useModal()
 
   return (
-    <div className="flex py-2 items-center">
+    <div className="flex py-2 items-center justify-between">
       <div className="flex justify-center items-center bg-primary w-10 h-10 rounded-md shrink-0">
-        {name === 'good' ? <GoodIcon size={18} /> : <BadIcon size={19} />}
+        {name === 'good' ? <GoodIcon size={22} /> : <BadIcon size={22} />}
       </div>
-      <div className="flex text-sm p-2 text-slate-700" onClick={onSelect}>
-        <span>{note}</span>
-      </div>
-      <div className="p-2 flex flex-col justify-center">
-        <PopConfirm open={openPopconfirm} onOk={onDelete} onCancel={closePopconfirm} />
-        <div onClick={openPopconfirmModal}>
-          <CloseIcon size={15} />
+      <div className="flex justify-between items-center flex-1">
+        <div className="flex text-sm p-2 text-slate-700" onClick={onSelect}>
+          <span>{note}</span>
+        </div>
+        <div className="p-2 flex flex-col justify-center">
+          <PopConfirm open={openPopconfirm} onOk={onDelete} onCancel={closePopconfirm} />
+          <Button onClick={openPopconfirmModal} className="bg-primary" size="small">
+            <RemoveIcon size={15} />
+          </Button>
         </div>
       </div>
     </div>

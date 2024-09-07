@@ -32,8 +32,7 @@ CREATE TABLE behavior_instance (
     date date NOT NULL,
     behavior_id uuid NOT NULL REFERENCES behavior(id),
     cycle_id uuid NOT NULL REFERENCES cycle(id),
-    note text,
-    CONSTRAINT unique_behavior_instance UNIQUE (date, behavior_id, cycle_id)
+    note text
 );
 
 -- Insert sample data
