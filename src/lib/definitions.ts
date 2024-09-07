@@ -25,6 +25,10 @@ export interface BehaviorInstance {
   note?: string
 }
 
+export interface BehaviorInstanceComplete extends BehaviorInstance {
+  name: string
+}
+
 export interface Statistic {
   name: string
   value: number

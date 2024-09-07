@@ -13,3 +13,12 @@ textarea,
 select {
   font-size: 16px;
 }
+
+.rc_body-days-of-month .rc_body-cell.rc_selected .rc_body-cell_value {
+  background-color: #F4C752 !important;
+  border-radius: 50%;
+}
+
+.rc_root {
+  background-color: var(--tw-bg-background) !important;
+}

@@ -15,7 +15,7 @@ const CyclesList: React.FC<Props> = ({ cycles = [] }) => {
     <div>
       {cycles.map((cycle) => (
         <div
-          className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 my-2 shadow-md"
+          className=" p-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 my-2 shadow-md"
           key={cycle.id}
         >
           <a href="#">
