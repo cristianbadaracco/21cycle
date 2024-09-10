@@ -1,14 +1,18 @@
 import { Form, Input, Row, Col, Button, Radio, Space } from 'antd'
 import { GoodIcon, BadIcon } from '@/components/icons/Icons'
 
-import type { BehaviorInstanceComplete } from '@/lib/definitions'
+import type { Behavior, BehaviorInstanceComplete } from '@/lib/definitions'
 
 interface FormBehaviorProps {
   onSubmit: (values: any) => void
   data?: BehaviorInstanceComplete
+  loading?: boolean
+  behaviorOptions?: Behavior[]
 }
 
-const FormBehavior: React.FC<FormBehaviorProps> = ({ onSubmit, data }) => {
+const AddEditBehaviorInstance: React.FC<FormBehaviorProps> = ({ onSubmit, data, loading = false, behaviorOptions }) => {
+  const [goodOption, badOption] = behaviorOptions ?? [undefined, undefined]
+
   const [form] = Form.useForm()
 
   return (
@@ -26,13 +30,13 @@ const FormBehavior: React.FC<FormBehaviorProps> = ({ onSubmit, data }) => {
           >
             <Radio.Group>
               <Space direction="vertical">
-                <Radio value="3f6f8852-5a36-4ee7-a3de-2584aa4d3909">
+                <Radio value={goodOption?.id} disabled={goodOption === undefined}>
                   <div className="flex gap-2 items-center">
                     <GoodIcon size={25} />
                     <span>Positivo</span>
                   </div>
                 </Radio>
-                <Radio value="63b8aa35-0d15-43bb-b60a-095c3aa0b0fb">
+                <Radio value={badOption?.id} disabled={badOption === undefined}>
                   <div className="flex gap-2 items-center">
                     <BadIcon size={25} />
                     <span>Negativo</span>
@@ -50,11 +54,11 @@ const FormBehavior: React.FC<FormBehaviorProps> = ({ onSubmit, data }) => {
       </Row>
       <Row justify="end" className="mt-10">
         <Button htmlType="submit" className="bg-secondary">
-          Guardar
+          {loading ? 'Guardando...' : 'Guardar'}
         </Button>
       </Row>
     </Form>
   )
 }
 
-export default FormBehavior
+export default AddEditBehaviorInstance

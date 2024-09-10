@@ -3,12 +3,14 @@ import BehaviorSection from '../_components/BehaviorSection'
 /* import DailyChart from '@/components/charts/DailyChart'
 
 import { transformBehaviorsToStatistics } from '@/lib/utils' */
-import { getAllBehaviorInstancesComplete } from '@/lib/data'
+import { getAllBehaviorInstancesComplete, getAllBehaviors } from '@/lib/data'
 
 import './page.css'
 
 const Cycle = async (): Promise<React.ReactNode> => {
   const behaviors = await getAllBehaviorInstancesComplete()
+  const behaviorOptions = await getAllBehaviors()
+
   /* const statistics = transformBehaviorsToStatistics(behaviors) */
 
   return (
@@ -17,7 +19,7 @@ const Cycle = async (): Promise<React.ReactNode> => {
         <CalendarSection />
       </div>
       <div className="h-[0_0_30%] ">
-        <BehaviorSection behaviors={behaviors} />
+        <BehaviorSection behaviors={behaviors} behaviorOptions={behaviorOptions} />
       </div>
       {/* {statistics !== undefined && <DailyChart data={sampleData} />} */}
     </div>

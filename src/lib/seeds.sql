@@ -30,8 +30,8 @@ CREATE TABLE behavior (
 CREATE TABLE behavior_instance (
     id uuid primary key default uuid_generate_v4(),
     date date NOT NULL,
-    behavior_id uuid NOT NULL REFERENCES behavior(id),
-    cycle_id uuid NOT NULL REFERENCES cycle(id),
+    behavior_id uuid NOT NULL,
+    cycle_id uuid NOT NULL,
     note text
 );
 

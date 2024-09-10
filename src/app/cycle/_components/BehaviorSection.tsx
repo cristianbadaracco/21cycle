@@ -1,26 +1,34 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { Button, Modal } from 'antd'
+import { Button, Modal, notification } from 'antd'
 import { uuidv4 } from '@/lib/utils'
 
-import { type BehaviorInstanceComplete } from '@/lib/definitions'
-import { addBehaviorInstance, getAllBehaviorInstancesComplete, updateBehaviorInstance } from '@/lib/data'
+import type { Behavior, BehaviorInstance, BehaviorInstanceComplete } from '@/lib/definitions'
+import {
+  addBehaviorInstance,
+  getAllBehaviorInstancesComplete,
+  removeBehaviorInstance,
+  updateBehaviorInstance,
+} from '@/lib/data'
 
 import useModal from '@/hooks/useModal'
 
-import Form from './Form'
+import Form from '../../../components/forms/AddEditBehaviorInstance'
 
 import BehaviorItem from './BehaviorItem'
 
 interface Props {
   behaviors?: BehaviorInstanceComplete[]
+  behaviorOptions?: Behavior[]
 }
 
-const BehaviorSection: React.FC<Props> = ({ behaviors: behaviorData }) => {
+const BehaviorSection: React.FC<Props> = ({ behaviors: behaviorData, behaviorOptions }) => {
   const [behaviors, setBehaviors] = useState<BehaviorInstanceComplete[]>(behaviorData ?? [])
+  const [loading, setLoading] = useState(false)
 
   const [isEditMode, setIsEditMode] = useState(false)
+
   const [selectedBehavior, setSelectedBehavior] = useState<BehaviorInstanceComplete | undefined>(undefined)
 
   const { isOpen, openModal, closeModal } = useModal()
@@ -38,24 +46,55 @@ const BehaviorSection: React.FC<Props> = ({ behaviors: behaviorData }) => {
   }, [])
 
   const onSubmit = async (values: BehaviorInstanceComplete): Promise<void> => {
-    console.log('ON SUBMIT', values)
-    if (isEditMode) {
-      await updateBehaviorInstance(values)
-    } else {
-      values.id = uuidv4()
-      values.date = new Date()
-      values.cycle_id = '10a3fa07-d1a0-487b-a168-a410dbcf1afd'
-      await addBehaviorInstance(values)
+    const selectedDate = JSON.parse(localStorage.getItem('selectedDate') ?? '')
+    const behavior: BehaviorInstance = {
+      ...values,
+      id: values?.id ?? uuidv4(),
+      date: selectedDate !== '' ? new Date(selectedDate as string) : new Date(),
+      cycle_id: values?.cycle_id ?? '10a3fa07-d1a0-487b-a168-a410dbcf1afd',
+      note: values?.note ?? undefined,
+      behavior_id: values?.behavior_id ?? undefined,
+    }
+
+    setLoading(true)
+    try {
+      if (isEditMode) {
+        await updateBehaviorInstance(behavior)
+      } else {
+        const response = await addBehaviorInstance(behavior)
+        if (response !== null) {
+          notification.success({
+            message: 'Comportamiento guardado con exito',
+          })
+        }
+      }
+    } catch (error) {
+      notification.error({
+        message: 'Ha ocurrido un error al guardar un comportamiento.',
+      })
+    } finally {
+      setLoading(false)
     }
 
     await fetchBehaviors()
     closeModal()
   }
 
-  const onDelete = useCallback((id: string) => {
-    const removedBehaviors = behaviors.filter((behavior) => behavior.id !== id)
-    setBehaviors(removedBehaviors)
-  }, [])
+  const onDelete = async (id: string): Promise<void> => {
+    setLoading(true)
+    try {
+      const removedBehaviors = await removeBehaviorInstance(id)
+      console.log(removedBehaviors)
+      if (removedBehaviors !== null) {
+        notification.success({
+          message: 'Comportamiento eliminado con exito',
+        })
+      }
+    } finally {
+      setLoading(false)
+    }
+    await fetchBehaviors()
+  }
 
   const fetchBehaviors = async (): Promise<void> => {
     const updatedBehaviors = await getAllBehaviorInstancesComplete()
@@ -70,21 +109,24 @@ const BehaviorSection: React.FC<Props> = ({ behaviors: behaviorData }) => {
             void onSubmit(values as BehaviorInstanceComplete)
           }}
           data={selectedBehavior}
+          loading={loading}
+          behaviorOptions={behaviorOptions}
         />
       </Modal>
       <div className="mt-2">
-        {behaviors.map((behavior) => (
-          <BehaviorItem
-            key={behavior.id}
-            behavior={behavior}
-            onDelete={() => {
-              onDelete(behavior.id)
-            }}
-            onSelect={() => {
-              onEditBehavior(behavior)
-            }}
-          />
-        ))}
+        {Array.isArray(behaviors) &&
+          behaviors.map((behavior) => (
+            <BehaviorItem
+              key={behavior.id}
+              behavior={behavior}
+              onDelete={() => {
+                void onDelete(behavior.id)
+              }}
+              onSelect={() => {
+                onEditBehavior(behavior)
+              }}
+            />
+          ))}
       </div>
       <Button
         onClick={onAddBehavior}

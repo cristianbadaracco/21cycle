@@ -11,7 +11,6 @@ interface DailyChartProps {
 }
 
 const DailyChart: React.FC<DailyChartProps> = ({ data }) => {
-  console.log(data)
   return (
     <div style={{ width: '100%', height: 350, marginTop: 30 }}>
       <ResponsiveContainer>

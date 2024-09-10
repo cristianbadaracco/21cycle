@@ -14,7 +14,7 @@ const Layout: React.FC<LayoutProps> = async ({ children, params }) => {
   const { id } = params
   const cycles = await getAllCycles()
 
-  const cycle = cycles.find((cycle) => cycle.id === id)
+  const cycle = Array.isArray(cycles) && cycles.find((cycle) => cycle.id === id)
 
   if (cycle === undefined) {
     notFound()
@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = async ({ children, params }) => {
 
   return (
     <div>
-      <MobileHeader title={cycle?.name ?? ''} />
+      <MobileHeader title={cycle !== false ? cycle?.name : ''} />
       {children}
     </div>
   )
